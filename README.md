@@ -58,10 +58,10 @@ Here is a basic overview of the connections:
   The relays will switch the connected appliances on or off.
   Example button mappings:
   
-  Button 1: Toggle Load 1
-  Button 2: Toggle Load 2
-  Button 3: Toggle Load 3
-  Button 4: Toggle Load 4
+      Button 1: Toggle Load 1
+      Button 2: Toggle Load 2
+      Button 3: Toggle Load 3
+      Button 4: Toggle Load 4
 ## Components Used
     Arduino Nano
     IR Receiver (TSOP1738 or similar)
