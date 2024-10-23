@@ -1,16 +1,6 @@
-# -IR-Remote-Control-Home-Appliance-using-Arduino-Nano
+# IR-Remote-Control-Home-Appliance-using-Arduino-Nano
 This project allows you to remotely control home appliances using an IR remote and an Arduino Nano. With this setup, you can manage up to 4 devices (such as lights, fans, etc.), and the system saves the appliance states to EEPROM, ensuring they are restored after a power reset.
 
-## Table of Contents
-    Project Overview
-    Features 
-    Hardware Required
-    Software Required
-    Wiring Diagram
-    Installation and Setup
-    How to Use
-    Project Customization
-    Contributing
 ## Project Overview
 This project utilizes an IR remote to control home appliances connected through a relay module to an Arduino Nano. The system decodes the IR signals, turning the appliances on or off based on the buttons pressed. States of appliances are stored using EEPROM so that even after a power failure, the system will restore the last known state of each appliance.
 
@@ -30,7 +20,7 @@ This project utilizes an IR remote to control home appliances connected through 
 ## Software Required
     Arduino IDE: Download from here.
     IRremote Library: Install it from the Arduino Library Manager.
-      In the Arduino IDE, go to Sketch > Include Library > Manage Libraries and search for IRremote.
+    In the Arduino IDE, go to Sketch > Include Library > Manage Libraries and search for IRremote.
     
 ## Wiring Diagram
 Here is a basic overview of the connections:
@@ -45,6 +35,7 @@ Here is a basic overview of the connections:
         GND	        Relay Module GND	 Ground 
      
 ## Circuit Diagram
+![image](https://github.com/user-attachments/assets/ea4ffd84-a317-49d2-9160-f830d72ad3ae)
 
 
 ## Installation and Setup
@@ -56,11 +47,7 @@ Here is a basic overview of the connections:
   ### Install the IRremote Library:
 
     In the Arduino IDE, go to Sketch > Include Library > Manage Libraries and search for IRremote. Install it.
-  ### Upload the Code:
-
-    Connect the Arduino Nano to your computer.
-    Select Arduino Nano in the Tools > Board menu, and choose the correct port.
-    Upload the code to your Arduino.
+ 
 ## How to Use
   Setup Your Appliances:
 
@@ -75,27 +62,4 @@ Here is a basic overview of the connections:
   Button 2: Toggle Load 2
   Button 3: Toggle Load 3
   Button 4: Toggle Load 4
-## Memory Persistence:
 
-  The system saves the on/off state of each appliance in EEPROM, so after a power cycle, the Arduino will restore the last state of each appliance.
-Project Customization
-## Changing Remote Codes
-  You can easily modify the code to use your own IR remote by replacing the IR codes in the sketch. To find the codes for your remote:
-  
-  Use the IRrecvDumpV2 example in the IRremote library to print the IR codes.
-  Modify the code to map the new codes to the appliances.
-    Example:
-    if (results.value == 0x1FE906F) {
-      // Turn on Appliance 1
-    }
-## Adding More Appliances
-    To control more than 4 appliances, expand the project by adding more relays and modifying the code to include additional pins and IR codes.
-
-## Contributing
-    Contributions are welcome! If you have suggestions for improving the project, feel free to open an issue or submit a pull request.
-    
-    Fork this repository.
-    Create a new branch: git checkout -b feature-branch.
-    Make your changes and commit: git commit -m 'Add new feature'.
-    Push the branch: git push origin feature-branch.
-    Submit a pull request
