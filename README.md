@@ -62,4 +62,11 @@ Here is a basic overview of the connections:
   Button 2: Toggle Load 2
   Button 3: Toggle Load 3
   Button 4: Toggle Load 4
-
+## Components Required
+    Arduino Nano
+    IR Receiver (TSOP1738 or similar)
+    4-channel Relay Module
+    IR Remote
+    Appliances (e.g., lights, fans)
+    Jumper wires
+    Breadboard (optional)
