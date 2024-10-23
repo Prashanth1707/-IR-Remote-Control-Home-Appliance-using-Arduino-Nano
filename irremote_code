@@ -1,0 +1,141 @@
+#include <IRremote.h>
+#include <EEPROM.h>
+
+// Pin Definitions
+const int RECV_PIN = A0;
+const int Relay1 = 2;  // Load1 Pin Out
+const int Relay2 = 3;  // Load2 Pin Out
+const int Relay3 = 4;  // Load3 Pin Out
+const int Relay4 = 5;  // Load4 Pin Out
+
+// IR Receiver
+IRrecv irrecv(RECV_PIN);
+decode_results results;
+
+// Relay states
+int load1, load2, load3, load4, power;
+
+// IR Codes (replace with actual codes from your remote)
+#define IR_LOAD1_ON  0x1FE906F
+#define IR_LOAD1_OFF 0x1FEE01F
+#define IR_LOAD2_ON  0x1FEF807
+#define IR_LOAD2_OFF 0x1FE50AF
+#define IR_LOAD3_ON  0x1FE708F
+#define IR_LOAD3_OFF 0x1FE30CF
+#define IR_LOAD4_ON  0x1FE9867
+#define IR_LOAD4_OFF 0x1FE00FF
+#define IR_POWER_ON  0x1FE7887
+#define IR_POWER_OFF 0x1FE48B7
+
+// Function to initialize relay pins
+void initializeRelays() {
+  pinMode(Relay1, OUTPUT);
+  pinMode(Relay2, OUTPUT);
+  pinMode(Relay3, OUTPUT);
+  pinMode(Relay4, OUTPUT);
+
+  // Set all relays to off initially
+  digitalWrite(Relay1, HIGH);
+  digitalWrite(Relay2, HIGH);
+  digitalWrite(Relay3, HIGH);
+  digitalWrite(Relay4, HIGH);
+}
+
+// Function to read saved states from EEPROM
+void loadStatesFromEEPROM() {
+  load1 = EEPROM.read(1);
+  load2 = EEPROM.read(2);
+  load3 = EEPROM.read(3);
+  load4 = EEPROM.read(4);
+  power = EEPROM.read(5);
+}
+
+// Function to update relay states
+void updateRelayStates() {
+  if (power == 1) {  // If power is off, turn off all relays
+    digitalWrite(Relay1, HIGH);
+    digitalWrite(Relay2, HIGH);
+    digitalWrite(Relay3, HIGH);
+    digitalWrite(Relay4, HIGH);
+  } else {  // Otherwise, set relays based on saved states
+    digitalWrite(Relay1, load1);
+    digitalWrite(Relay2, load2);
+    digitalWrite(Relay3, load3);
+    digitalWrite(Relay4, load4);
+  }
+}
+
+// Setup function, runs once when the program starts
+void setup() {
+  Serial.begin(9600);
+  initializeRelays();
+  
+  // Start IR receiver
+  irrecv.enableIRIn();
+  irrecv.blink13(true);  // Optional: Blinks pin 13 on IR activity
+
+  // Load relay states from EEPROM
+  loadStatesFromEEPROM();
+  
+  // Update the relays according to the loaded state
+  updateRelayStates();
+}
+
+// Main loop function, runs repeatedly
+void loop() {
+  if (irrecv.decode(&results)) {
+    Serial.println(results.value, HEX);  // For debugging: prints received IR code in HEX format
+
+    switch (results.value) {
+      case IR_LOAD1_ON:
+        load1 = LOW;
+        EEPROM.update(1, load1);
+        break;
+      case IR_LOAD1_OFF:
+        load1 = HIGH;
+        EEPROM.update(1, load1);
+        break;
+      case IR_LOAD2_ON:
+        load2 = LOW;
+        EEPROM.update(2, load2);
+        break;
+      case IR_LOAD2_OFF:
+        load2 = HIGH;
+        EEPROM.update(2, load2);
+        break;
+      case IR_LOAD3_ON:
+        load3 = LOW;
+        EEPROM.update(3, load3);
+        break;
+      case IR_LOAD3_OFF:
+        load3 = HIGH;
+        EEPROM.update(3, load3);
+        break;
+      case IR_LOAD4_ON:
+        load4 = LOW;
+        EEPROM.update(4, load4);
+        break;
+      case IR_LOAD4_OFF:
+        load4 = HIGH;
+        EEPROM.update(4, load4);
+        break;
+      case IR_POWER_ON:
+        power = LOW;  // Power on
+        EEPROM.update(5, power);
+        break;
+      case IR_POWER_OFF:
+        power = HIGH;  // Power off
+        EEPROM.update(5, power);
+        break;
+    }
+
+    // Update relays based on the new state
+    updateRelayStates();
+    
+    irrecv.resume();  // Ready to receive the next value
+    delay(100);  // Debounce delay
+  }
+
+  // Small delay to avoid excessive CPU usage
+  delay(500);
+}
